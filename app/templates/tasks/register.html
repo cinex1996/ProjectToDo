@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rejestracja — SocialApp</title>
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" type="image/svg+xml"
+        href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%231877f2"/><stop offset="1" stop-color="%237aa8ff"/></linearGradient></defs><rect rx="14" width="64" height="64" fill="url(%23g)"/><path d="M34 10h-4A18 18 0 0 0 12 28v4a18 18 0 0 0 18 18h4a18 18 0 0 0 18-18v-4A18 18 0 0 0 34 10z" fill="white"/></svg>' />
+  <link rel="alternate icon" href="/favicon.ico" />
+  <meta name="theme-color" content="#1877f2" />
+  <meta name="description" content="Nowoczesny, responsywny formularz rejestracji z walidacją, show/hide hasłem, potwierdzeniem hasła i integracją z Flask." />
+
+  <!-- Style: TWÓJ login.css + Bootstrap (tak jak na stronie logowania) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+</head>
+<body>
+  <main class="wrap">
+
+    <section class="card" aria-label="Panel rejestracji" id="register">
+      <!-- Lewy panel wizualny -->
+      <aside class="visual">
+        <a class="brand" href="{{ url_for('main.index') }}">
+          <span class="logo">
+            <svg viewBox="0 0 24 24"><path d="M13.5 2h-3A8.5 8.5 0 0 0 2 10.5v3A8.5 8.5 0 0 0 10.5 22h3A8.5 8.5 0 0 0 22 13.5v-3A8.5 8.5 0 0 0 13.5 2z"/></svg>
+          </span>
+          <strong>SocialApp</strong>
+        </a>
+        <h1>Dołącz do nas</h1>
+        <p>Utwórz konto, aby śledzić znajomych, zapisywać treści i korzystać z pełnej funkcjonalności.</p>
+        <svg class="illus" width="360" height="360" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="100" cy="100" r="80" stroke="white" opacity=".1"/>
+          <circle cx="100" cy="100" r="60" stroke="white" opacity=".08"/>
+          <circle cx="100" cy="100" r="40" stroke="white" opacity=".06"/>
+        </svg>
+      </aside>
+
+      <!-- Formularz rejestracji -->
+      <form class="form" id="registerForm" method="POST" action="{{ url_for('auth.register') }}" novalidate>
+        <h2>Utwórz konto</h2>
+        <p class="muted">Wypełnij poniższe pola, aby założyć konto.</p>
+
+        <div id="formError" class="error" role="alert">Popraw zaznaczone pola (email, hasło, potwierdzenie).</div>
+        {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2l8 6 8-6"/></svg>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="jan.kowalski@example.com"
+                   required value="{{ request.form.get('email','') }}" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Hasło</label>
+          <div class="input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6h-1V9a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-3 0H9V9a3 3 0 0 1 6 0v2z"/></svg>
+            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="••••••••"
+                   required minlength="6" />
+            <button type="button" id="togglePw1" aria-label="Pokaż/ukryj hasło">👁️</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="PasswordRepeat">Powtórz hasło</label>
+          <div class="input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6h-1V9a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zm-3 0H9V9a3 3 0 0 1 6 0v2z"/></svg>
+            <input id="PasswordRepeat" name="PasswordRepeat" type="password" autocomplete="new-password" placeholder="••••••••"
+                   required minlength="6" />
+            <button type="button" id="togglePw2" aria-label="Pokaż/ukryj hasło">👁️</button>
+          </div>
+        </div>
+
+        <!-- (opcjonalnie) Zgody/Regulamin -->
+        <!--
+        <div class="row">
+          <label class="checkbox" for="terms">
+            <input id="terms" name="terms" type="checkbox" required />
+            <span>Akceptuję regulamin</span>
+          </label>
+        </div>
+        -->
+
+        <button class="btn primary block" type="submit">Zarejestruj się</button>
+
+        {# Flash messages z Flask — kategorie na Bootstrap #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-wrap" aria-live="polite" role="status">
+              {% for category, msg in messages %}
+                {% set bs = 'danger' if category in ['error','danger'] else category %}
+                <div class="alert alert-{{ bs }} mb-2">{{ msg|safe }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <button class="btn ghost block" type="button" id="demoBtn">Wypełnij danymi demo</button>
+
+        <p class="muted" style="margin-top:8px">
+          Masz już konto?
+          <a href="{{ url_for('main.index') }}#login" style="color:var(--accent)">Zaloguj się</a>
+        </p>
+      </form>
+    </section>
+
+    <footer class="page">© <span id="year"></span> SocialApp • Rejestracja</footer>
+  </main>
+
+  <script>
+    // Rok w stopce
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Pokaż/ukryj hasła
+    function toggleVisibility(input, btn){
+      const t = input.getAttribute('type') === 'password' ? 'text' : 'password';
+      input.setAttribute('type', t);
+      btn.textContent = (t === 'password') ? '👁️' : '🙈';
+    }
+    const pw1 = document.getElementById('password');
+    const pw2 = document.getElementById('PasswordRepeat');
+    document.getElementById('togglePw1').addEventListener('click', () => toggleVisibility(pw1, togglePw1));
+    document.getElementById('togglePw2').addEventListener('click', () => toggleVisibility(pw2, togglePw2));
+
+    // Demo dane
+    document.getElementById('demoBtn').addEventListener('click', () => {
+      document.getElementById('email').value = 'demo@social.app';
+      document.getElementById('password').value = 'password123';
+      document.getElementById('PasswordRepeat').value = 'password123';
+    });
+
+    // Prosta walidacja po stronie klienta (email + długość hasła + zgodność haseł)
+    const form = document.getElementById('registerForm');
+    const errorBox = document.getElementById('formError');
+    form.addEventListener('submit', (e) => {
+      errorBox.classList.remove('show');
+      const email = form.email.value.trim();
+      const pass1 = form.password.value.trim();
+      const pass2 = form.PasswordRepeat.value.trim();
+
+      const okEmail = /.+@.+\..+/.test(email);
+      const okLen = pass1.length >= 6;
+      const okMatch = pass1 === pass2;
+
+      if(!(okEmail && okLen && okMatch)) {
+        e.preventDefault();
+        errorBox.textContent =
+          !okEmail ? 'Podaj poprawny adres email.' :
+          !okLen   ? 'Hasło powinno mieć co najmniej 6 znaków.' :
+          'Hasła muszą być identyczne.';
+        errorBox.classList.add('show');
+      }
+      // Jeśli OK: naturalny submit → Flask (POST /auth.register), flash + redirect po backendzie.
+    });
+  </script>
+</body>
+</html>

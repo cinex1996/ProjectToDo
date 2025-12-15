@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>MojaSieć – Strona główna</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/posts.css') }}">
+
+</head>
+<body>
+<div class="app">
+    <!-- GÓRNY NAVBAR -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="logo">MojaSieć</div>
+            <div class="search-box">
+                🔍
+                <input type="text" placeholder="Szukaj w MojaSieć...">
+            </div>
+        </div>
+
+        <nav class="nav-center">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-icon">👥</div>
+            <div class="nav-icon">▶</div>
+            <div class="nav-icon">🛒</div>
+        </nav>
+
+        <div class="nav-right">
+            <div class="profile-badge">
+                <div class="profile-avatar">M</div>
+                <span class="profile-name">{{ session['email'] }}</span>
+                <form method="POST" action="{{ url_for('auth.logout') }}" style="display:inline;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="profile-name logout-btn">Wyloguj</button>
+</form>
+            </div>
+            <div class="nav-circle-btn">＋</div>
+            <div class="nav-circle-btn">💬</div>
+            <div class="nav-circle-btn">🔔</div>
+        </div>
+    </header>
+
+    <!-- GŁÓWNY UKŁAD STRONY -->
+    <div class="layout">
+        <!-- LEWY SIDEBAR -->
+        <aside class="sidebar-left">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Nawigacja</div>
+                <ul class="sidebar-list">
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">👤</div>
+                        <span>Twój profil</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">📰</div>
+                        <span>Aktualności</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">👥</div>
+                        <span>Znajomi</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">📺</div>
+                        <span>Watch</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">📅</div>
+                        <span>Wydarzenia</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Skróty</div>
+                <ul class="sidebar-list">
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">💻</div>
+                        <span>Grupa: Programowanie</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">🥊</div>
+                        <span>Grupa: Trening i boks</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- FEED / NEWS -->
+        <main class="feed">
+            <!-- KARTA: UTWÓRZ POST -->
+            <form method="POST" action="{{ url_for('posts.create_post') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <section class="card create-post">
+                    <div class="create-post-top">
+                        <div class="profile-avatar">M</div>
+                        <input name="Post" type="text" placeholder="O czym myślisz, {{ session['email'] }}?" id="Post">
+                        <input type="submit" value="Wyślij">
+                    </div>
+                    <div class="create-post-bottom">
+                        <div class="create-post-btn">📹 Wideo na żywo</div>
+                        <div class="create-post-btn">📷 Zdjęcie/film</div>
+                        <div class="create-post-btn">😊 Nastrój/aktywność</div>
+                    </div>
+                </section>
+
+            </form>
+            {% if posts %}
+                {% for post in posts %}
+
+    <article class="post-card">
+  <header class="post-header">
+    <div class="post-left">
+      <div class="post-avatar">
+        {{ (post.author.email[0] if post.author and post.author.email else "U")|upper }}
+      </div>
+
+      <div class="post-meta">
+        <div class="post-author">
+          {{ post.author.email if post.author else "Nieznany użytkownik" }}
+        </div>
+
+
+      </div>
+    </div>
+
+    <button class="post-more" type="button" aria-label="Więcej">⋯</button>
+  </header>
+
+  <div class="post-content">
+    {{ post.post | e }}
+  </div>
+
+  <footer class="post-actions">
+    <button class="post-btn" type="button">👍 Lubię to</button>
+    <button class="post-btn" type="button">💬 Komentarz</button>
+    <button class="post-btn" type="button">↗ Udostępnij</button>
+  </footer>
+</article>
+  {% endfor %}
+{% else %}
+  <p>Brak postów – napisz pierwszy 🙂</p>
+{% endif %}
+
+        </main>
+
+        <!-- PRAWY SIDEBAR -->
+        <aside class="sidebar-right">
+            <section class="card">
+                <div class="sidebar-title">Propozycje dla Ciebie</div>
+                <p class="small-text" style="margin-top: 6px;">
+                    Dołącz do grup i znajdź ludzi o podobnych zainteresowaniach.
+                </p>
+                <ul class="sidebar-list" style="margin-top: 8px;">
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">🛡</div>
+                        <span>Cybersecurity Polska</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <div class="sidebar-icon">🌍</div>
+                        <span>Praca w IT w Niemczech</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <div class="sidebar-title">Kontakty (online)</div>
+                <div class="contact-item">
+                    <div class="contact-left">
+                        <div class="contact-avatar">A</div>
+                        <span>Adam</span>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-left">
+                        <div class="contact-avatar">K</div>
+                        <span>Kasia</span>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-left">
+                        <div class="contact-avatar">P</div>
+                        <span>Piotrek</span>
+                    </div>
+                    <div class="status-dot"></div>
+                </div>
+            </section>
+
+            <p class="small-text">
+                © 2025 MojaSieć – widok przykładowej strony po zalogowaniu.
+            </p>
+        </aside>
+    </div>
+</div>
+</body>
+</html>

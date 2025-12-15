@@ -1,0 +1,76 @@
+.post-card{
+  background: #1f232a;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px 14px 10px;
+  margin-bottom: 14px;
+}
+
+.post-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.post-left{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.post-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  flex: 0 0 42px;
+}
+
+.post-meta{ line-height:1.2; }
+.post-author{ font-weight:600; }
+.post-time{ font-size:.82rem; opacity:.7; margin-top:2px; }
+
+.post-more{
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,.7);
+  font-size: 22px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 10px;
+}
+.post-more:hover{ color:#fff; background: rgba(255,255,255,.06); }
+
+.post-content{
+  white-space: pre-wrap;  /* zachowuje entery */
+  font-size: .98rem;
+  padding-left: 52px;     /* wyrównanie do tekstu obok avatara */
+  opacity: .95;
+}
+
+.post-actions{
+  display:flex;
+  gap:8px;
+  padding-left: 52px;
+  margin-top: 12px;
+}
+
+.post-btn{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.9);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: .9rem;
+}
+.post-btn:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.14);
+}
