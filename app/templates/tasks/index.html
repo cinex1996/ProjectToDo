@@ -16,7 +16,11 @@
             <div class="logo">MojaSieć</div>
             <div class="search-box">
                 🔍
-                <input type="text" placeholder="Szukaj w MojaSieć...">
+                <form action="{{ url_for('search.search_user') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="text" placeholder="Szukaj znajomych w MojaSieć..." name="search">
+                    <button type="submit">Szukaj</button>
+                </form>
             </div>
         </div>
 
@@ -29,7 +33,7 @@
 
         <div class="nav-right">
             <div class="profile-badge">
-                <div class="profile-avatar">M</div>
+                <div class="profile-avatar"> {{ (session.get("email") or "U")[0]|upper }}</div>
                 <span class="profile-name">{{ session['email'] }}</span>
                 <form method="POST" action="{{ url_for('auth.logout') }}" style="display:inline;">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

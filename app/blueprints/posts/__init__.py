@@ -1,4 +1,4 @@
 from flask import Blueprint
 
-bp = Blueprint("posts",__name__,"../../templates")
+bp = Blueprint("posts",__name__,template_folder="../../templates")
 from . import create_post

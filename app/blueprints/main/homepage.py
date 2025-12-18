@@ -1,7 +1,7 @@
 from flask import render_template, session
 from . import bp
 from ...decorators import login_requirement, nocache
-from app.models.Posts import Post
+from app.models.posts import Post
 
 
 

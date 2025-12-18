@@ -8,7 +8,7 @@ class Config:
         "sqlite:///" + os.path.join(BASE_DIR, "app.db"),
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    WFT_CSRF_ENABLED = True
+    WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 3600
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"

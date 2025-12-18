@@ -19,10 +19,12 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     from .blueprints.auth import bp as auth_bp
     from .blueprints.reset import bp as reset_bp
     from .blueprints.posts import bp as create_bp
+    from .blueprints.search import bp as search_bp
     app.register_blueprint(main_bp, url_prefix="/")
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(reset_bp, url_prefix="/reset")
     app.register_blueprint(create_bp, url_prefix="/posts")
+    app.register_blueprint(search_bp, url_prefix="/search")
 
     @app.after_request
     def secure_headers(resp):
