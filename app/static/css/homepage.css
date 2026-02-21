@@ -398,3 +398,58 @@
                 width: 120px;
             }
         }
+        .flash-container {
+    position: fixed;
+    top: 80px;          /* pod Twoim top-navem */
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.flash {
+    min-width: 220px;
+    max-width: 320px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35);
+    background: #ffffff;
+    color: #111827;
+    border-left: 4px solid #9ca3af;
+    animation: flash-slide-in 0.25s ease-out, flash-fade-out 0.25s ease-in 4s forwards;
+}
+
+/* chmurka błędu – czerwony akcent */
+.flash-error {
+    background: #fef2f2;
+    border-left-color: #b91c1c;
+    color: #7f1d1d;
+}
+
+/* (opcjonalnie) jak chcesz zieloną przy sukcesie */
+.flash-success {
+    background: #ecfdf3;
+    border-left-color: #16a34a;
+    color: #14532d;
+}
+
+@keyframes flash-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes flash-fade-out {
+    to {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+}

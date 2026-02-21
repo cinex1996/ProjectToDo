@@ -22,3 +22,5 @@ def create_post():
             db.session.commit()
             flash("Dodałeś post", "success")
             return redirect(url_for("main.home"))
+
+    return None

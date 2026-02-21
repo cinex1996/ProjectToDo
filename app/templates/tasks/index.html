@@ -45,7 +45,17 @@
             <div class="nav-circle-btn">🔔</div>
         </div>
     </header>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
     <!-- GŁÓWNY UKŁAD STRONY -->
     <div class="layout">
         <!-- LEWY SIDEBAR -->
@@ -111,7 +121,7 @@
 
             </form>
             {% if posts %}
-                {% for post in posts %}
+    {% for post in posts %}
 
     <article class="post-card">
   <header class="post-header">
@@ -140,6 +150,20 @@
     <button class="post-btn" type="button">👍 Lubię to</button>
     <button class="post-btn" type="button">💬 Komentarz</button>
     <button class="post-btn" type="button">↗ Udostępnij</button>
+      <button class="post-btn" type="button">Edytuj</button>
+      <form action="{{ url_for('posts.edit_post', post_id=post.id) }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% if post.user_id == session.get('user_id') %}
+          <textarea name="Post">{{ post.post }}</textarea>
+          <input type="submit" value="Edytuj">
+          {% endif %}
+      </form>
+  <form action="{{ url_for('posts.delete_post', id=post.id) }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% if post.user_id == session.get('user_id') %}
+      <input type="submit" value="Usuń">
+      {% endif %}
+  </form>
   </footer>
 </article>
   {% endfor %}

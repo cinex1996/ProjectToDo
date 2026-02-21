@@ -1,6 +1,6 @@
 from pyexpat.errors import messages
 
-from flask import request, render_template
+from flask import request, render_template, flash, redirect, url_for
 
 from app.blueprints.search import bp
 from app.models.users import User
@@ -18,8 +18,9 @@ def search_user():
         else:
             email = User.query.filter_by(email=search).first()
             if email:
-                message = "Taki użytkownik istnieje"
+                return render_template("tasks/search_user.html", message=message, email=email)
             else:
-                message = "Taki użytkownik nie istnieje"
+                flash("Taki użytkownik nie istnieje","error")
+                return redirect(url_for("main.home"))
 
     return render_template("tasks/search_user.html", message=message,email=email)
